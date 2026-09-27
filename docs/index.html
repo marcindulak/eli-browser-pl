@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- NFR-005: legal terminology should not be silently machine-translated. -->
+  <meta name="google" content="notranslate">
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- Suppresses the browser's automatic /favicon.ico request; no icon exists. -->
+  <link rel="icon" href="data:,">
+  <title>ELI-Browser-PL</title>
+</head>
+<body>
+  <p id="intro-text">Nieoficjalna przeglądarka Dziennika Ustaw. Znajdź ustawę w <a href="https://eli.gov.pl/search" target="_blank" rel="noopener noreferrer">eli.gov.pl/search</a> i wklej poniżej jej adres.</p>
+
+  <div id="sticky-header">
+    <form id="act-url-form">
+      <input type="text" id="act-url" name="act-url" aria-label="Adres ustawy">
+    </form>
+    <div id="parsed-reference"></div>
+    <div id="error-message" role="alert"></div>
+    <button type="button" id="retry" hidden>Spróbuj ponownie</button>
+
+    <!-- Hidden from the UI (REQUIREMENTS.md Deferred Features): toggling it
+         doesn't refresh already-shown results, so it's kept, tested, and
+         disabled from view rather than removed. -->
+    <input type="checkbox" id="show-repealed" hidden>
+    <label for="show-repealed" hidden>Pokaż uchylone</label>
+
+    <div id="search-box">
+      <label for="search-query" class="visually-hidden">Szukaj w ustawie</label>
+      <input type="search" id="search-query" placeholder="Szukaj w ustawie">
+    </div>
+
+    <div id="act-title-row">
+      <p id="act-title"></p>
+      <button type="button" id="back-to-top" aria-label="Przewiń do góry" title="Przewiń do góry">↑</button>
+    </div>
+  </div>
+
+  <ul id="search-results"></ul>
+
+  <div id="browse-view"></div>
+
+  <!-- @huggingface/transformers and @sqlite.org/sqlite-wasm, pinned by version and SRI hash
+       (REQUIREMENTS.md Technical Choices). Imports are fetched only when a script imports them:
+       the embeddings one after the user selects embeddings search (FR-023). The onnxruntime-web
+       module transformers.js loads itself is not listed: WebKit rejects a pinned transitive import. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@huggingface/transformers": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.0/dist/transformers.min.js",
+      "@sqlite.org/sqlite-wasm": "https://cdn.jsdelivr.net/npm/@sqlite.org/sqlite-wasm@3.53.4-build1/dist/index.mjs"
+    },
+    "integrity": {
+      "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.0/dist/transformers.min.js": "sha384-qgXJ7dcf8bYoYbel57c9rhOd7qRdLSraaF9XvjXERQll0Pf5e/HV8CDccvn3xgTp",
+      "https://cdn.jsdelivr.net/npm/@sqlite.org/sqlite-wasm@3.53.4-build1/dist/index.mjs": "sha384-j+gbV/w2zeGv9WgmsnVPrKK5J4gE96kxDRDMpGJTnRgI68fZrprxhjFdcuoaGIdC"
+    }
+  }
+  </script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

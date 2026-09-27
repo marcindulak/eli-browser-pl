@@ -1,0 +1,142 @@
+:root {
+  --white: rgba(255, 255, 255, 1);
+  --gray-darkest: rgba(33, 37, 41, 1);
+  --gray-light: rgba(222, 226, 230, 1);
+  --navy: rgba(13, 71, 161, 1);
+  --khaki: rgba(255, 244, 160, 1);
+  --page-padding: 1rem;
+  --sticky-header-height: 0px;
+}
+
+body {
+  margin: 0;
+  padding: var(--page-padding);
+  color: var(--gray-darkest);
+  background: var(--white);
+}
+
+a {
+  color: var(--navy);
+}
+
+#intro-text {
+  margin: 0;
+}
+
+#sticky-header {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-light);
+  /* Cancels out body's own --page-padding so this reaches the viewport's
+     edges while stuck; its own padding then reserves the same breathing
+     room, now inside the sticky box instead of outside it. */
+  margin: 0 calc(-1 * var(--page-padding));
+  padding: var(--page-padding) var(--page-padding) 0.5rem;
+}
+
+#act-url-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The same horizontal padding keeps both inputs' text lined up. */
+#act-url,
+#search-query {
+  padding-inline: 0.25rem;
+}
+
+#act-url {
+  flex: 1 1 60%;
+  min-width: 0;
+  padding-block: 0.5rem;
+  box-sizing: border-box;
+}
+
+/* Not wrapped in its own container like #search-box: giving it its own line
+   was postponed. */
+#show-repealed {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+#search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Hides an element visually while keeping it in the accessibility tree.
+   `display: none` would also remove it from screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#search-query {
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#act-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+#act-title {
+  font-weight: bold;
+  margin: 0;
+  min-width: 0;
+}
+
+#back-to-top {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  line-height: 1;
+  font-size: 1.25rem;
+}
+
+.provision-list {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.provision-list > li:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+/* Nested lists indent modestly; the top-level list (flush left, above)
+   stays that way for NFR-001's narrow viewports, unlike ELI's own much
+   larger per-level indent. */
+li > .provision-list {
+  margin-top: 0.5em;
+  padding-left: 0.75em;
+}
+
+#browse-view button {
+  text-align: left;
+}
+
+/* FR-008/FR-019: every revealProvision() target (a provision, a footnote's
+   glossary entry) clears the sticky header on scrollIntoView(). */
+#browse-view li[id] {
+  scroll-margin-top: var(--sticky-header-height);
+}
+
+mark {
+  background: var(--khaki);
+  color: var(--gray-darkest);
+}
