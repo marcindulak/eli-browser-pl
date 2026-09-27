@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- NFR-005: legal terminology should not be silently machine-translated. -->
+  <meta name="google" content="notranslate">
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- Suppresses the browser's automatic /favicon.ico request; no icon exists. -->
+  <link rel="icon" href="data:,">
+  <title>ELI-Browser-PL</title>
+</head>
+<body>
+  <p id="intro-text">Nieoficjalna przeglądarka Dziennika Ustaw. Znajdź ustawę w <a href="https://eli.gov.pl/search" target="_blank" rel="noopener noreferrer">eli.gov.pl/search</a> i wklej poniżej jej adres.</p>
+
+  <div id="sticky-header">
+    <form id="act-url-form">
+      <input type="text" id="act-url" name="act-url" aria-label="Adres ustawy">
+    </form>
+    <div id="parsed-reference"></div>
+    <div id="error-message" role="alert"></div>
+    <button type="button" id="retry" hidden>Spróbuj ponownie</button>
+
+    <div id="search-box">
+      <label for="search-query" class="visually-hidden">Szukaj w ustawie</label>
+      <input type="search" id="search-query" placeholder="Szukaj w ustawie">
+      <!-- FR-023: a dropdown built from a button and a panel, not a <select>, because an <option>
+           cannot contain a link. Each "?" link sits beside its label, not inside it, so following
+           it never selects the method. -->
+      <button type="button" id="search-method-button" aria-expanded="false" aria-controls="search-method" aria-label="Metoda wyszukiwania: BM25"><span id="search-method-current">BM25</span> <span aria-hidden="true">▾</span></button>
+      <div id="search-method" hidden role="radiogroup" aria-label="Metoda wyszukiwania">
+        <div>
+          <input type="radio" class="visually-hidden" name="search-method" id="search-method-bm25" value="bm25" checked>
+          <a id="search-method-bm25-link" href="https://pl.wikipedia.org/wiki/Okapi_BM25" target="_blank" rel="noopener noreferrer" aria-label="BM25: artykuł w Wikipedii">?</a>
+          <label for="search-method-bm25">BM25</label>
+        </div>
+        <div>
+          <input type="radio" class="visually-hidden" name="search-method" id="search-method-embeddings" value="embeddings">
+          <a id="search-method-embeddings-link" href="https://pl.wikipedia.org/wiki/Osadzanie_s%C5%82%C3%B3w" target="_blank" rel="noopener noreferrer" aria-label="Emb.: artykuł w Wikipedii">?</a>
+          <label for="search-method-embeddings">Emb.</label>
+        </div>
+      </div>
+    </div>
+    <div id="embeddings-status" role="status" hidden>Ładowanie modelu…</div>
+
+    <div id="act-title-row">
+      <p id="act-title"></p>
+      <button type="button" id="back-to-top" aria-label="Przewiń do góry" title="Przewiń do góry">↑</button>
+    </div>
+  </div>
+
+  <p id="source-notice" hidden>Tekst pochodzi z nieoficjalnej konwersji <a href="https://github.com/PolskiAgentW/dziennik-ustaw-md" target="_blank" rel="noopener noreferrer">github.com/PolskiAgentW/dziennik-ustaw-md</a> i może zawierać błędy.</p>
+
+  <ul id="search-results"></ul>
+
+  <div id="browse-view"></div>
+
+  <dialog id="embeddings-consent" aria-labelledby="embeddings-consent-title">
+    <form method="dialog">
+      <h2 id="embeddings-consent-title">Wyszukiwanie osadzeniami</h2>
+      <p>Ta metoda pobiera z sieci <a href="https://ai.google.dev/gemma/terms" target="_blank" rel="noopener noreferrer">model językowy</a> i bibliotekę uruchomieniową, razem około 50 MB. Dla części ustaw wektory są gotowe, dla pozostałych są liczone w przeglądarce, co może potrwać kilka minut. Wynik obliczeń jest zapisywany na tym urządzeniu. Można go usunąć w ustawieniach przeglądarki, w danych witryny.</p>
+      <button value="granted">Pobierz i użyj</button>
+      <button value="declined">Anuluj</button>
+    </form>
+  </dialog>
+
+  <!-- @sqlite.org/sqlite-wasm, pinned by version and SRI hash (REQUIREMENTS.md Technical Choices).
+       transformers.js is not listed: only the embedding workers use it, and a worker does not use this
+       import map, so docs/js/embedding-worker.js checks its hash itself, after the user selects
+       embeddings search (FR-023). -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@sqlite.org/sqlite-wasm": "https://cdn.jsdelivr.net/npm/@sqlite.org/sqlite-wasm@3.53.4-build1/dist/index.mjs"
+    },
+    "integrity": {
+      "https://cdn.jsdelivr.net/npm/@sqlite.org/sqlite-wasm@3.53.4-build1/dist/index.mjs": "sha384-j+gbV/w2zeGv9WgmsnVPrKK5J4gE96kxDRDMpGJTnRgI68fZrprxhjFdcuoaGIdC"
+    }
+  }
+  </script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

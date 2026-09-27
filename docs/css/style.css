@@ -1,0 +1,225 @@
+:root {
+  --white: rgba(255, 255, 255, 1);
+  --gray-darkest: rgba(33, 37, 41, 1);
+  --gray: rgba(118, 118, 118, 1);
+  --gray-light: rgba(222, 226, 230, 1);
+  --gray-lightest: rgba(239, 239, 239, 1);
+  --navy: rgba(13, 71, 161, 1);
+  --khaki: rgba(255, 244, 160, 1);
+  --page-padding: 1rem;
+  --sticky-header-height: 0px;
+}
+
+body {
+  margin: 0;
+  padding: var(--page-padding);
+  color: var(--gray-darkest);
+  background: var(--white);
+}
+
+a {
+  color: var(--navy);
+}
+
+#intro-text {
+  margin: 0;
+}
+
+#sticky-header {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-light);
+  /* Cancels out body's own --page-padding so this reaches the viewport's
+     edges while stuck; its own padding then reserves the same breathing
+     room, now inside the sticky box instead of outside it. */
+  margin: 0 calc(-1 * var(--page-padding));
+  padding: var(--page-padding) var(--page-padding) 0.5rem;
+}
+
+#act-url-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The same padding keeps both inputs' text lined up and both as tall as
+   FR-023's method button. */
+#act-url,
+#search-query {
+  padding: 0.5rem 0.25rem;
+}
+
+#act-url {
+  flex: 1 1 60%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Hides an element visually while keeping it in the accessibility tree.
+   `display: none` would also remove it from screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#search-query {
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#search-method-button {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+}
+
+/* Opens below the button and moves with the sticky header, so it is never left
+   behind when the page scrolls. */
+#search-method {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--gray-light);
+  color: var(--gray-darkest);
+  background: var(--white);
+}
+
+/* `display` is set only while shown: setting it on `#search-method` itself would
+   override the `hidden` attribute's `display: none`. */
+#search-method:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+}
+
+#search-method div:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* WCAG 2.2 SC 2.5.8: a target of at least 24 CSS pixels. */
+#search-method a,
+#search-method label {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
+
+#search-method a {
+  justify-content: center;
+}
+
+#search-method label {
+  padding-inline: 0.25rem;
+}
+
+/* The radio button is visually hidden, so the selected row is marked by weight
+   and background (not by colour alone, WCAG 2.2 SC 1.4.1) and a keyboard
+   focus outline is drawn on the label (SC 2.4.7). */
+#search-method input:checked ~ label {
+  font-weight: bold;
+  background: var(--gray-light);
+}
+
+#search-method input:focus-visible ~ label {
+  outline: 2px solid var(--navy);
+}
+
+#embeddings-status {
+  margin-top: 0.5rem;
+}
+
+#act-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+#act-title {
+  font-weight: bold;
+  margin: 0;
+  min-width: 0;
+}
+
+#back-to-top {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  line-height: 1;
+  font-size: 1.25rem;
+}
+
+.provision-list {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.provision-list > li:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+/* Nested lists indent modestly; the top-level list (flush left, above)
+   stays that way for NFR-001's narrow viewports, unlike ELI's own much
+   larger per-level indent. */
+li > .provision-list {
+  margin-top: 0.5em;
+  padding-left: 0.75em;
+}
+
+#browse-view button {
+  text-align: left;
+}
+
+.subdivision-heading {
+  text-align: center;
+}
+
+/* FR-008/FR-019: every revealProvision() target (a provision, an Artykuł, a footnote's
+   glossary entry, a footnote marker) clears the sticky header on scrollIntoView(). */
+#browse-view li[id],
+#browse-view article[id],
+#browse-view .footnote-marker {
+  scroll-margin-top: var(--sticky-header-height);
+}
+
+mark {
+  background: var(--khaki);
+  color: var(--gray-darkest);
+}
+
+/* FR-008: a link, not a <button>, since it opens another site in a new tab, so
+   the native button look is imitated to keep it from blending into the
+   breadcrumb link before it. */
+.source-link {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--gray);
+  border-radius: 0.2rem;
+  background: var(--gray-lightest);
+  color: var(--gray-darkest);
+  font-size: 0.8333rem;
+  font-family: sans-serif;
+  text-decoration: none;
+}
